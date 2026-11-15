@@ -1,0 +1,330 @@
+@import "tailwindcss";
+
+:root {
+  /* ===== Modern Navy EdTech Design Tokens ===== */
+  --canvas: #F4F7FD;
+  --surface: #FFFFFF;
+  --surface-tint: #F8FAFF;
+  --border-soft: #E1EAFB;
+  --border-med: #C8D9F6;
+
+  --ink-heading: #092551;
+  --ink-h2: #092856;
+  --ink-body: #11264A;
+  --ink-muted: #5C7299;
+  --ink-footer: #7485A4;
+
+  --navy-top: #071B3B;
+  --navy-mid: #0A2857;
+  --navy-bot: #06152E;
+
+  --azure: #1364E7;
+  --azure-bright: #227FF5;
+  --azure-dark: #075ADF;
+
+  --ide-bg: #081A37;
+  --ide-bar: #0A1730;
+  --ide-border: #3F6EA8;
+  --ide-ok: #64DCA2;
+
+  /* รักษาสี Semantic & Alias สำหรับ Teacher Heatmap และส่วนเดิมไม่ให้พัง */
+  --cloth: #F4F7FD;
+  --cloth-deep: #092551;
+  --warp: #D6E3FA;
+  --ink-2: #5C7299;
+  --paper: #FFFFFF;
+  --reward: #F59E0B;
+  --w1: #0EA5E9;
+  --w2: #8B5CF6;
+  --w3: #10B981;
+
+  --s-mastered: #16A34A;
+  --s-passed: #F59E0B;
+  --s-stuck: #DC2626;
+  --s-none: #CBD5E1;
+}
+
+@theme inline {
+  --font-sans: var(--font-prompt), system-ui, sans-serif;
+  --font-display: var(--font-kanit), var(--font-prompt), system-ui, sans-serif;
+  --font-mono: var(--font-ibm-mono), Consolas, ui-monospace, monospace;
+
+  --color-canvas: var(--canvas);
+  --color-surface: var(--surface);
+  --color-cloth: var(--cloth);
+  --color-cloth-deep: var(--cloth-deep);
+  --color-warp: var(--warp);
+  --color-ink-2: var(--ink-2);
+  --color-paper: var(--paper);
+  --color-reward: var(--reward);
+  --color-w1: var(--w1);
+  --color-w2: var(--w2);
+  --color-w3: var(--w3);
+  --color-s-mastered: var(--s-mastered);
+  --color-s-passed: var(--s-passed);
+  --color-s-stuck: var(--s-stuck);
+  --color-s-none: var(--s-none);
+}
+
+/* ---------- ฐานตัวอักษรภาษาไทย (Kanit + Prompt + IBM Plex Mono) ---------- */
+html {
+  font-size: 16px;
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: var(--font-sans);
+  font-size: 0.9375rem;
+  line-height: 1.65;
+  background-color: var(--canvas);
+  color: var(--ink-body);
+}
+
+h1, h2, h3, h4, .font-display {
+  font-family: var(--font-display);
+  letter-spacing: -0.015em;
+}
+
+code, pre, .font-code {
+  font-family: var(--font-mono);
+}
+
+/* ---------- Focus Accessibility ---------- */
+:where(a, button, input, select, textarea, summary, [tabindex]):focus-visible {
+  outline: 2px solid var(--azure);
+  outline-offset: 2px;
+}
+
+/* ---------- Modern EdTech Surfaces, Cards & Gradients ---------- */
+.cloth-bg {
+  background-color: var(--canvas);
+}
+
+.cloth-band-subtle {
+  background-color: #EBF2FE;
+}
+
+.ed-sidebar {
+  background: linear-gradient(180deg, #071B3B 0%, #0A2857 70%, #06152E 100%);
+  box-shadow: 5px 0 30px rgba(7, 28, 56, 0.125);
+}
+
+.ed-topbar {
+  background-color: rgba(255, 255, 255, 0.96);
+  backdrop-filter: blur(8px);
+  box-shadow: 0 3px 16px rgba(16, 39, 75, 0.04);
+}
+
+.ed-hero {
+  background: linear-gradient(115deg, #F4FBFF 0%, #E4F3FF 52%, #EBEBFD 100%);
+  border: 1px solid #D6E8FC;
+  border-radius: 24px;
+  box-shadow: 0 18px 44px rgba(18, 57, 109, 0.11);
+}
+
+.ed-card {
+  background-color: #FFFFFF;
+  border: 1px solid #E1EAFB;
+  border-radius: 18px;
+  box-shadow: 0 5px 16px rgba(22, 68, 124, 0.06);
+  transition: transform 180ms ease, box-shadow 180ms ease, border-color 180ms ease;
+}
+
+.ed-card-hover:hover {
+  transform: translateY(-2px);
+  border-color: #C4D9FA;
+  box-shadow: 0 12px 28px rgba(18, 57, 109, 0.1);
+}
+
+.ed-editor-card {
+  background-color: var(--ide-bg);
+  border: 1px solid var(--ide-border);
+  border-radius: 18px;
+  box-shadow: 0 26px 52px rgba(12, 57, 122, 0.34);
+}
+
+.ed-h1-gradient {
+  background: linear-gradient(100deg, #0A5FE6 0%, #12A5E8 45%, #0A5FE6 90%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+/* ---------- Buttons ---------- */
+.ed-btn-primary,
+.btn-notch {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  min-height: 44px;
+  padding: 0 20px;
+  border-radius: 12px;
+  font-family: var(--font-sans);
+  font-weight: 600;
+  font-size: 0.9375rem;
+  background: linear-gradient(95deg, #147AFF 0%, #075ADF 100%);
+  color: #FFFFFF;
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  box-shadow: 0 7px 16px rgba(11, 99, 229, 0.22);
+  cursor: pointer;
+  transition: transform 150ms ease, box-shadow 150ms ease, filter 150ms ease;
+}
+
+.ed-btn-primary:hover:not(:disabled),
+.btn-notch:hover:not(:disabled) {
+  transform: translateY(-1px);
+  filter: brightness(1.05);
+  box-shadow: 0 10px 22px rgba(11, 99, 229, 0.28);
+}
+
+.ed-btn-primary:disabled,
+.btn-notch:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.ed-btn-secondary,
+.btn-notch-outline {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  min-height: 44px;
+  padding: 0 18px;
+  border-radius: 12px;
+  font-family: var(--font-sans);
+  font-weight: 600;
+  font-size: 0.9rem;
+  background-color: #FFFFFF;
+  color: #11264A;
+  border: 1px solid #D4E2FA;
+  box-shadow: 0 3px 10px rgba(18, 57, 109, 0.05);
+  cursor: pointer;
+  transition: background-color 150ms ease, border-color 150ms ease, transform 150ms ease;
+}
+
+.ed-btn-secondary:hover:not(:disabled),
+.btn-notch-outline:hover:not(:disabled) {
+  background-color: #F4F8FF;
+  border-color: #9FC0F8;
+  transform: translateY(-1px);
+}
+
+.btn-notch-inverse {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  min-height: 44px;
+  padding: 0 20px;
+  border-radius: 12px;
+  font-weight: 600;
+  font-size: 0.9375rem;
+  background-color: #FFFFFF;
+  color: #092551;
+  border: 1px solid #E1EAFB;
+  box-shadow: 0 6px 18px rgba(7, 27, 59, 0.16);
+  cursor: pointer;
+  transition: transform 150ms ease, background-color 150ms ease;
+}
+
+.btn-notch-inverse:hover:not(:disabled) {
+  background-color: #EFF6FF;
+  transform: translateY(-1px);
+}
+
+/* ---------- Legacy Shape Helpers (อัปเดตเป็นมุมโค้งสะอาดตาเพื่อให้หน้าเดิมดูดีขึ้นทันที) ---------- */
+.notch {
+  border-radius: 12px;
+}
+
+.notch-lg {
+  border-radius: 18px;
+}
+
+.notch-octagon {
+  border-radius: 16px;
+}
+
+.input-thread {
+  width: 100%;
+  min-height: 42px;
+  padding: 8px 12px;
+  background-color: #FFFFFF;
+  color: #11264A;
+  border: 1px solid #D1E0F8;
+  border-radius: 10px;
+  outline: none;
+  font-size: 0.9375rem;
+  transition: border-color 150ms ease, box-shadow 150ms ease;
+}
+
+.input-thread:focus {
+  border-color: #1364E7;
+  box-shadow: 0 0 0 3px rgba(19, 100, 231, 0.14);
+}
+
+.input-thread::placeholder {
+  color: #7485A4;
+}
+
+/* ---------- Squircle Gradient Icons ---------- */
+.squircle-blue {
+  background: linear-gradient(140deg, #59BDFF 0%, #0868ED 100%);
+  border-radius: 14px;
+}
+.squircle-amber {
+  background: linear-gradient(140deg, #FFE86A 0%, #FFAE17 100%);
+  border-radius: 14px;
+}
+.squircle-purple {
+  background: linear-gradient(140deg, #C28BFF 0%, #8444EC 100%);
+  border-radius: 14px;
+}
+.squircle-emerald {
+  background: linear-gradient(140deg, #5CE3A6 0%, #089E68 100%);
+  border-radius: 14px;
+}
+.squircle-rose {
+  background: linear-gradient(140deg, #FF8CA8 0%, #E11D48 100%);
+  border-radius: 14px;
+}
+
+/* ---------- Subtle Floating & Pet Motion ---------- */
+@keyframes float-slow {
+  0%, 100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-4px);
+  }
+}
+
+.animate-float-slow {
+  animation: float-slow 3.2s ease-in-out infinite;
+}
+
+@keyframes pulse-dot {
+  0%, 100% {
+    opacity: 0.35;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+
+.seam-dash-1 { animation: pulse-dot 720ms infinite 0ms; }
+.seam-dash-2 { animation: pulse-dot 720ms infinite 180ms; }
+.seam-dash-3 { animation: pulse-dot 720ms infinite 360ms; }
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-float-slow,
+  .seam-dash-1,
+  .seam-dash-2,
+  .seam-dash-3 {
+    animation: none !important;
+    transform: none !important;
+    opacity: 1 !important;
+  }
+}

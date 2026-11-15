@@ -1,0 +1,88 @@
+# ============================================================================
+# Docker Compose — ใช้ไฟล์เดียวกันได้ทั้งจำลองบน Windows และรันจริงบน Raspberry Pi 5
+# จำลองข้อจำกัดทรัพยากร Pi 5 (4 CPU cores, RAM คุมเพดาน)
+# ============================================================================
+
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: teaching_postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-teaching}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-change_me_db_password}
+      POSTGRES_DB: ${POSTGRES_DB:-teaching_web}
+      TZ: Asia/Bangkok
+    command:
+      - "postgres"
+      - "-c"
+      - "shared_buffers=512MB"
+      - "-c"
+      - "effective_cache_size=2GB"
+      - "-c"
+      - "work_mem=8MB"
+      - "-c"
+      - "max_connections=60"
+    ports:
+      - "127.0.0.1:5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ../docs/DATABASE_SCHEMA.sql:/docker-entrypoint-initdb.d/01-schema.sql:ro
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-teaching} -d ${POSTGRES_DB:-teaching_web}"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+    deploy:
+      resources:
+        limits:
+          cpus: "2.0"
+          memory: 3G
+
+  app:
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile
+    container_name: teaching_app
+    restart: unless-stopped
+    depends_on:
+      postgres:
+        condition: service_healthy
+    environment:
+      NODE_ENV: production
+      APP_URL: ${APP_URL:-http://localhost}
+      DATABASE_URL: postgresql://${POSTGRES_USER:-teaching}:${POSTGRES_PASSWORD:-change_me_db_password}@postgres:5432/${POSTGRES_DB:-teaching_web}
+      SESSION_SECRET: ${SESSION_SECRET}
+      GOOGLE_CLIENT_ID: ${GOOGLE_CLIENT_ID}
+      GOOGLE_CLIENT_SECRET: ${GOOGLE_CLIENT_SECRET}
+      ALLOWED_GOOGLE_DOMAIN: ${ALLOWED_GOOGLE_DOMAIN:-pccpl.ac.th}
+      ENABLE_DEV_AUTH: "false"
+    expose:
+      - "3000"
+    deploy:
+      resources:
+        limits:
+          cpus: "3.0"
+          memory: 4G
+
+  nginx:
+    image: nginx:1.27-alpine
+    container_name: teaching_nginx
+    restart: unless-stopped
+    depends_on:
+      - app
+    ports:
+      - "80:80"
+    volumes:
+      - ./nginx.conf:/etc/nginx/conf.d/default.conf:ro
+      - ../public/games:/usr/share/nginx/html/games:ro
+      - ../public/pyodide:/usr/share/nginx/html/pyodide:ro
+    deploy:
+      resources:
+        limits:
+          cpus: "1.0"
+          memory: 512M
+
+volumes:
+  postgres_data:
+

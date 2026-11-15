@@ -1,0 +1,26 @@
+# Dependencies
+/node_modules
+/.pnp
+.pnp.*
+
+# Next.js
+/.next/
+/out/
+
+# Production & Build
+/build
+*.tsbuildinfo
+next-env.d.ts
+
+# Environment variables
+.env
+.env*.local
+
+# Logs & OS
+npm-debug.log*
+.DS_Store
+Thumbs.db
+
+# Large raw curriculum source archives (mp4/pptx > 100MB; converted assets live in public/courses/)
+/docs/curriculum/
+

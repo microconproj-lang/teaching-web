@@ -41,6 +41,23 @@ class ReturnSignal {
 class BreakSignal {}
 class ContinueSignal {}
 
+function hasOwn(obj: Record<string, unknown>, key: string): boolean {
+  return Object.prototype.hasOwnProperty.call(obj, key);
+}
+
+function createNullDict(): Record<string, unknown> {
+  return Object.create(null) as Record<string, unknown>;
+}
+
+function setDictEntry(dict: Record<string, unknown>, key: string, value: unknown): void {
+  Object.defineProperty(dict, key, {
+    value,
+    writable: true,
+    enumerable: true,
+    configurable: true,
+  });
+}
+
 function isDict(v: PyVal): v is Record<string, unknown> {
   return (
     typeof v === "object" &&
@@ -243,19 +260,19 @@ function tokenizeExpr(src: string): Tok[] {
 }
 
 class Scope {
-  vars: Record<string, PyVal> = {};
+  vars: Record<string, PyVal> = createNullDict();
   constructor(public parent: Scope | null = null) {}
   get(name: string): PyVal {
-    if (Object.prototype.hasOwnProperty.call(this.vars, name)) return this.vars[name];
+    if (hasOwn(this.vars, name)) return this.vars[name];
     if (this.parent) return this.parent.get(name);
     throw new Error(`NameError: name '${name}' is not defined`);
   }
   has(name: string): boolean {
-    if (Object.prototype.hasOwnProperty.call(this.vars, name)) return true;
+    if (hasOwn(this.vars, name)) return true;
     return this.parent ? this.parent.has(name) : false;
   }
   set(name: string, value: PyVal) {
-    this.vars[name] = value;
+    setDictEntry(this.vars, name, value);
   }
 }
 
@@ -405,7 +422,7 @@ function evalExprString(expr: string, scope: Scope, ctx: ExecCtx): PyVal {
     if (Array.isArray(container)) return container.some((x) => pyEquals(x, item));
     if (container instanceof PyTuple) return container.items.some((x) => pyEquals(x, item));
     if (container instanceof Set) return container.has(item);
-    if (isDict(container)) return String(item) in container;
+    if (isDict(container)) return hasOwn(container, String(item));
     throw new Error(`TypeError: argument of type '${pyTypeName(container)}' is not iterable`);
   }
 
@@ -490,7 +507,7 @@ function evalExprString(expr: string, scope: Scope, ctx: ExecCtx): PyVal {
         const methodName = attrTok.val;
         if (matchPunc("(")) {
           const args: PyVal[] = [];
-          const kwargs: Record<string, PyVal> = {};
+          const kwargs: Record<string, PyVal> = createNullDict();
           parseCallArgs(args, kwargs);
           target = invokeMethod(target, methodName, args, kwargs);
         } else {
@@ -499,7 +516,7 @@ function evalExprString(expr: string, scope: Scope, ctx: ExecCtx): PyVal {
       } else if (p === "(") {
         consume();
         const args: PyVal[] = [];
-        const kwargs: Record<string, PyVal> = {};
+        const kwargs: Record<string, PyVal> = createNullDict();
         parseCallArgs(args, kwargs);
         if (typeof target !== "function") {
           throw new Error(`TypeError: '${pyTypeName(target)}' object is not callable`);
@@ -539,7 +556,7 @@ function evalExprString(expr: string, scope: Scope, ctx: ExecCtx): PyVal {
       ) {
         const key = consume().val;
         consume(); // =
-        kwargs[key] = parseExprWithTernary();
+        setDictEntry(kwargs, key, parseExprWithTernary());
       } else {
         args.push(parseExprWithTernary());
       }
@@ -630,15 +647,16 @@ function evalExprString(expr: string, scope: Scope, ctx: ExecCtx): PyVal {
 
     if (t.kind === "punc" && t.val === "{") {
       consume();
-      if (matchPunc("}")) return {};
+      if (matchPunc("}")) return createNullDict();
       const first = parseExprWithTernary();
       if (matchPunc(":")) {
         const firstVal = parseExprWithTernary();
-        const dict: Record<string, unknown> = { [String(first)]: firstVal };
+        const dict = createNullDict();
+        setDictEntry(dict, String(first), firstVal);
         while (matchPunc(",") && peek() && peek()!.val !== "}") {
           const k = parseExprWithTernary();
           if (!matchPunc(":")) throw new Error("SyntaxError: expected ':' in dict literal");
-          dict[String(k)] = parseExprWithTernary();
+          setDictEntry(dict, String(k), parseExprWithTernary());
         }
         if (!matchPunc("}")) throw new Error("SyntaxError: expected '}'");
         return dict;
@@ -749,7 +767,7 @@ function applyIndex(target: PyVal, index: PyVal): PyVal {
   }
   if (isDict(target)) {
     const key = String(index);
-    if (!(key in target)) throw new Error(`KeyError: '${key}'`);
+    if (!hasOwn(target, key)) throw new Error(`KeyError: '${key}'`);
     return target[key];
   }
   throw new Error(`TypeError: '${pyTypeName(target)}' object is not subscriptable`);
@@ -933,11 +951,11 @@ function invokeMethod(
         return Object.entries(target).map(([k, v]) => new PyTuple([k, v]));
       case "get": {
         const k = String(args[0]);
-        return k in target ? target[k] : (args[1] ?? null);
+        return hasOwn(target, k) ? target[k] : (args[1] ?? null);
       }
       case "pop": {
         const k = String(args[0]);
-        if (!(k in target)) {
+        if (!hasOwn(target, k)) {
           if (args.length > 1) return args[1];
           throw new Error(`KeyError: '${k}'`);
         }
@@ -947,7 +965,11 @@ function invokeMethod(
       }
       case "update": {
         const other = args[0];
-        if (isDict(other)) Object.assign(target, other);
+        if (isDict(other)) {
+          for (const [k, v] of Object.entries(other)) {
+            setDictEntry(target, k, v);
+          }
+        }
         return null;
       }
     }
@@ -1090,12 +1112,12 @@ function resolveIdentifier(name: string, scope: Scope, ctx: ExecCtx): PyVal {
     list: (args) => (args.length === 0 ? [] : [...toArray(args[0])]),
     tuple: (args) => new PyTuple(args.length === 0 ? [] : toArray(args[0])),
     set: (args) => new Set(args.length === 0 ? [] : toArray(args[0])),
-    dict: () => ({}),
+    dict: () => createNullDict(),
     ord: (args) => String(args[0]).charCodeAt(0),
     chr: (args) => String.fromCharCode(Number(args[0])),
   };
 
-  if (name in builtins) return builtins[name];
+  if (hasOwn(builtins, name)) return builtins[name];
   throw new Error(`NameError: name '${name}' is not defined`);
 }
 
@@ -1161,7 +1183,7 @@ function assignTarget(targetStr: string, val: PyVal, scope: Scope, ctx: ExecCtx)
       return;
     }
     if (isDict(container)) {
-      container[String(keyVal)] = val;
+      setDictEntry(container, String(keyVal), val);
       return;
     }
   }
@@ -1239,7 +1261,7 @@ function runBlock(lines: CodeLine[], scope: Scope, ctx: ExecCtx): unknown {
           try {
             const fnScope = new Scope(scope);
             params.forEach((p, idx) => {
-              if (p.name in kwargs) fnScope.set(p.name, kwargs[p.name]);
+              if (hasOwn(kwargs, p.name)) fnScope.set(p.name, kwargs[p.name]);
               else if (idx < args.length) fnScope.set(p.name, args[idx]);
               else if (p.defExpr !== null) fnScope.set(p.name, evalExprString(p.defExpr, scope, ctx));
               else throw new Error(`TypeError: ${fnName}() missing required argument '${p.name}'`);

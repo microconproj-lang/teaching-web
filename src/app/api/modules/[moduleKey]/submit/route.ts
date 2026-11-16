@@ -66,7 +66,9 @@ export async function POST(
       }
     } else {
       const { DEMO_CHALLENGES } = await import("@/modules/algo-quest-m1/demo-data");
-      const demoChallenge = DEMO_CHALLENGES.find((c) => c.id === body.challengeId);
+      const demoChallenge = DEMO_CHALLENGES.find(
+        (c) => c.id === body.challengeId || c.challengeKey === body.challengeId
+      );
       if (demoChallenge) {
         challengeConfig = demoChallenge.config;
         solutionCheck = demoChallenge.solutionCheck;

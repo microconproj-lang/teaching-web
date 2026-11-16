@@ -15,6 +15,7 @@ import {
   MicrobitCoordsVisualizer,
   RadioChannelVisualizer,
 } from "./MicrobitLessonVisualizers";
+import { TinkercadCircuitVisualizer } from "./V21103Visualizers";
 
 function StringSlicingVisualizer() {
   const [text, setText] = useState("COMPUTER");
@@ -507,6 +508,8 @@ export function LessonVisualizer({ type }: { type: VisualizerType }) {
       return <ArraySortVisualizer />;
     case "accel-gesture":
       return <AccelGestureVisualizer />;
+    case "tinkercad-circuit":
+      return <TinkercadCircuitVisualizer />;
   }
 }
 

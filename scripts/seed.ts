@@ -68,6 +68,20 @@ async function upsertModuleAndAssign(params: {
         manifest: manifest as unknown as Record<string, unknown>,
       })
       .returning();
+  } else {
+    [mod] = await db
+      .update(modules)
+      .set({
+        version: manifest.version,
+        title: manifest.title,
+        description: manifest.description,
+        targetGrades: manifest.targetGrades,
+        competencyTags: manifest.competencyTags,
+        manifest: manifest as unknown as Record<string, unknown>,
+        updatedAt: new Date(),
+      })
+      .where(eq(modules.id, mod.id))
+      .returning();
   }
 
   for (const ch of challengesList) {

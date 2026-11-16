@@ -229,7 +229,7 @@ export function CodingLabClient({
                 <div className="flex flex-wrap gap-1.5">
                   {[
                     { key: "g0", label: "ทั้งหมด", active: gradeFilter === 0 && !courseFilter, onClick: () => { setGradeFilter(0); setCourseFilter(""); } },
-                    { key: "g1", label: "ม.1", active: gradeFilter === 1 && !courseFilter, onClick: () => { setGradeFilter(1); setCourseFilter(""); } },
+                    { key: "v21103", label: "ม.1 (ว21103)", active: matchesCourseCode("ว21103", courseFilter) || (gradeFilter === 1 && !courseFilter), onClick: () => { setCourseFilter("ว21103"); setGradeFilter(1); } },
                     { key: "v21202", label: "ว21202 micro:bit", active: matchesCourseCode("ว21202", courseFilter), onClick: () => { setCourseFilter("ว21202"); setGradeFilter(1); } },
                     { key: "g2", label: "ม.2", active: gradeFilter === 2 && !courseFilter, onClick: () => { setGradeFilter(2); setCourseFilter(""); } },
                     { key: "g3", label: "ม.3", active: gradeFilter === 3 && !courseFilter, onClick: () => { setGradeFilter(3); setCourseFilter(""); } },

@@ -14,7 +14,8 @@ export type VisualizerType =
   | "microbit-coords"
   | "radio-channel"
   | "array-sort"
-  | "accel-gesture";
+  | "accel-gesture"
+  | "tinkercad-circuit";
 
 export interface LessonResourceDef {
   label: string;

@@ -1,3 +1,10 @@
+import { V21103_COURSE } from "@/content/courses/v21103/course";
+import { V21103_LESSONS } from "@/content/courses/v21103/lessons";
+import {
+  V21103_ADVENTURE_ISLANDS,
+  V21103_ARENA_CHALLENGES,
+  V21103_LAB_PROBLEMS,
+} from "@/content/courses/v21103/practice";
 import { V21202_COURSE } from "@/content/courses/v21202/course";
 import { V21202_LESSONS } from "@/content/courses/v21202/lessons";
 import {
@@ -27,36 +34,7 @@ export * from "@/core/config/curriculum-types";
 // ============================================================================
 
 export const COURSES: CourseDef[] = [
-  {
-    code: "ว21103",
-    slug: "v21103",
-    gradeLevel: 1,
-    gradeLabel: "ชั้นมัธยมศึกษาปีที่ 1",
-    title: "วิทยาการคำนวณและอัลกอริทึม",
-    subtitle: "ปูพื้นฐานการคิดเชิงคำนวณ แยกส่วนปัญหา รหัสฐานสอง และตรรกะเบื้องต้น",
-    semesterLabel: "ม.1 · เปิดให้เรียนรู้ & ทดลองได้ทันที",
-    status: "active",
-    theme: "white-azure",
-    tags: ["การคิดเชิงคำนวณ", "อัลกอริทึม", "เลขฐานสอง", "ตรรกะ"],
-    moduleKey: "algo-quest-m1",
-    stats: { lessonsCount: 2, exercisesCount: 4, missionsCount: 4, slidesCount: 12 },
-    units: [
-      {
-        unitNo: 1,
-        title: "UNIT 1 : อัลกอริทึมและการคิดเชิงคำนวณ",
-        description: "จัดลำดับขั้นตอนการทำงาน แก้ปัญหาทีละขั้น และมองเห็นตรรกะแบบเป็นระบบ",
-        status: "active",
-        lessonKeys: ["m1-algo-intro", "m1-binary-logic"],
-      },
-      {
-        unitNo: 2,
-        title: "UNIT 2 : วงจรตรรกะและการเขียนผังงาน",
-        description: "ประตูตรรกะ AND / OR / NOT และจำลองเงื่อนไขในชีวิตจริง",
-        status: "coming_soon",
-        lessonKeys: [],
-      },
-    ],
-  },
+  V21103_COURSE,
   {
     code: "ว22103",
     slug: "v22103",
@@ -233,90 +211,6 @@ export const INTERACTIVE_LESSONS: InteractiveLessonDef[] = [
     ],
   },
   {
-    key: "m1-algo-intro",
-    courseCode: "ว21103",
-    gradeLevel: 1,
-    unitNo: 1,
-    title: "อัลกอริทึมและการเรียงลำดับขั้นตอน",
-    subtitle: "ทำความเข้าใจลำดับก่อน-หลัง (Sequence) และจำลองหุ่นยนต์ทำงานทีละคำสั่ง",
-    durationMin: 12,
-    iconBg: "amber",
-    slides: [
-      {
-        id: "s1",
-        kind: "concept",
-        title: "คอมพิวเตอร์ทำตามคำสั่งทีละบรรทัด",
-        subtitle: "ถ้าสลับขั้นตอนผิด ผลลัพธ์ย่อมผิดเพี้ยนทันที",
-        body: [
-          "อัลกอริทึม (Algorithm) คือลำดับขั้นตอนการทำงานที่ชัดเจนและมีจุดสิ้นสุด",
-          "ก่อนเขียนโค้ดจริง เราต้องฝึก Decomposition (แยกปัญหาย่อย) และ Sequencing (เรียงลำดับก่อนหลัง) ให้แม่นยำ",
-        ],
-        callout: "สามารถกดเปิดด่านหุ่นยนต์จัดคิวใน 'แผนที่ล่าสมบัติ' เพื่อฝึกต่อยอดได้ทันที",
-      },
-      {
-        id: "s2",
-        kind: "visualizer",
-        title: "จำลองลำดับคิวคำสั่งหุ่นยนต์ (Step-by-Step)",
-        subtitle: "กดเดินหน้าทีละขั้นหรือทดลองสลับขั้นตอนเพื่อสังเกตผลลัพธ์",
-        body: ["สังเกตสถานะของแก้วโกโก้และค่าตัวแปรในแต่ละขั้นของการทำงาน"],
-        visualizerType: "queue-stepper",
-      },
-      {
-        id: "s3",
-        kind: "quiz",
-        title: "เช็กความเข้าใจ: ลำดับขั้นตอน",
-        body: ["เลือกคำตอบที่ถูกต้องที่สุด"],
-        quiz: {
-          checkKey: "quiz-m1-seq",
-          question: "เหตุใดการจัดลำดับขั้นตอนก่อนเขียนโปรแกรมจึงสำคัญ?",
-          options: [
-            "ช่วยให้คอมพิวเตอร์ทำงานตามลำดับที่ถูกต้องและลดข้อผิดพลาด",
-            "ทำให้ไม่ต้องใช้ไฟฟ้าในการประมวลผล",
-            "เพื่อทำให้ไฟล์โปรแกรมมีขนาดใหญ่ขึ้น",
-            "ไม่จำเป็น สามารถสลับบรรทัดใดก่อนก็ได้เสมอ",
-          ],
-          correctIndex: 0,
-          explanation: "คอมพิวเตอร์ทำตามคำสั่งทีละขั้นอย่างซื่อตรง หากลำดับก่อน-หลังผิด ผลลัพธ์จะคลาดเคลื่อนทันที",
-          coinReward: 10,
-        },
-      },
-    ],
-  },
-  {
-    key: "m1-binary-logic",
-    courseCode: "ว21103",
-    gradeLevel: 1,
-    unitNo: 1,
-    title: "เลขฐานสอง 0 กับ 1 และการแทนภาพ",
-    subtitle: "ถอดรหัส 8 บิตให้กลายเป็นค่าตัวเลขฐานสิบและลวดลายพิกเซล",
-    durationMin: 12,
-    iconBg: "emerald",
-    slides: [
-      {
-        id: "s1",
-        kind: "visualizer",
-        title: "Visualizer: เครื่องแปลงรหัสฐานสอง 8-Bit",
-        subtitle: "คลิกเปิด-ปิดแต่ละบิต (128, 64, 32, 16, 8, 4, 2, 1) เพื่อดูค่าเลขฐานสิบ",
-        body: ["คอมพิวเตอร์เก็บตัวเลข ตัวอักษร และสีพิกเซลทุกอย่างด้วยสวิตช์เปิด (1) และปิด (0)"],
-        visualizerType: "binary-bits",
-      },
-      {
-        id: "s2",
-        kind: "quiz",
-        title: "เช็กความเข้าใจ: ค่าบิตฐานสอง",
-        body: ["คำนวณค่าเลขฐานสิบจากรูปแบบบิตต่อไปนี้"],
-        quiz: {
-          checkKey: "quiz-m1-bin",
-          question: "เลขฐานสอง 00001010 มีค่าเท่ากับเท่าไรในระบบเลขฐานสิบ?",
-          options: ["8", "10", "12", "16"],
-          correctIndex: 1,
-          explanation: "บิตที่มีค่า 1 อยู่ที่ตำแหน่งค่าประจำหลัก 8 และ 2 ดังนั้น 8 + 2 = 10",
-          coinReward: 10,
-        },
-      },
-    ],
-  },
-  {
     key: "m3-caesar-cipher",
     courseCode: "ว23103",
     gradeLevel: 3,
@@ -391,6 +285,7 @@ export const INTERACTIVE_LESSONS: InteractiveLessonDef[] = [
       },
     ],
   },
+  ...V21103_LESSONS,
   ...V21202_LESSONS,
   ...V23202_LESSONS,
 ];
@@ -455,23 +350,6 @@ export const LAB_PROBLEMS: LabProblemDef[] = [
     ],
   },
   {
-    key: "lab-m1-steps",
-    courseCode: "ว21103",
-    gradeLevel: 1,
-    title: "จำลองขั้นบันไดอัลกอริทึม",
-    difficulty: "ง่าย",
-    topic: "Algorithm & Loop",
-    description: "รับจำนวนเต็ม n (เช่น 4) แล้วพิมพ์รูปดาว '*' เพิ่มทีละ 1 ดวงจนถึง n แถว",
-    filename: "stairs.py",
-    starterCode: `n = int(input())\nfor i in range(1, n + 1):\n    print("*" * i)\n`,
-    hint: "ใช้ range(1, n + 1) และคูณข้อความ \"*\" * i",
-    coinReward: 15,
-    testCases: [
-      { label: "n = 3", stdin: ["3"], expectedOutput: "*\n**\n***" },
-      { label: "n = 5", stdin: ["5"], expectedOutput: "*\n**\n***\n****\n*****" },
-    ],
-  },
-  {
     key: "lab-m3-password-check",
     courseCode: "ว23103",
     gradeLevel: 3,
@@ -490,6 +368,7 @@ export const LAB_PROBLEMS: LabProblemDef[] = [
       { label: "ไม่มีตัวเลข", stdin: ["abcdefghij"], expectedOutput: "WEAK" },
     ],
   },
+  ...V21103_LAB_PROBLEMS,
   ...V21202_LAB_PROBLEMS,
   ...V23202_LAB_PROBLEMS,
 ];
@@ -499,93 +378,7 @@ export const LAB_PROBLEMS: LabProblemDef[] = [
 // ============================================================================
 
 export const ADVENTURE_ISLANDS: AdventureIslandDef[] = [
-  {
-    key: "island-compass-m1",
-    order: 1,
-    courseCode: "ว21103",
-    gradeLevel: 1,
-    name: "เกาะเข็มทิศอัลกอริทึม",
-    subtitle: "ม.1 · ฝึกคิดเป็นลำดับ วางเงื่อนไข และจำลองการทำซ้ำ",
-    requiredLessonKey: "m1-algo-intro",
-    chestCoins: 30,
-    accentGradient: "from-sky-500 to-blue-600",
-    stages: [
-      {
-        key: "adv-m1-1",
-        code: "1-1",
-        title: "ทักทายศูนย์ควบคุม",
-        topicTag: "Sequence",
-        difficulty: "easy",
-        coinReward: 5,
-        xpReward: 25,
-        prompt: "สั่งพิมพ์ข้อความเริ่มต้นภารกิจว่า READY TO CODE",
-        starterCode: `print("READY TO CODE")\n`,
-        hint: "ใช้คำสั่ง print(\"READY TO CODE\")",
-        testCases: [{ label: "ตรวจข้อความ", expectedOutput: "READY TO CODE" }],
-      },
-      {
-        key: "adv-m1-2",
-        code: "1-2",
-        title: "สัญญาณไฟ Smart Fan",
-        topicTag: "Condition",
-        difficulty: "easy",
-        coinReward: 8,
-        xpReward: 30,
-        prompt: "อ่านค่าอุณหภูมิ temp = int(input()) ถ้ามากกว่า 28 ให้พิมพ์ ON มิฉะนั้นพิมพ์ OFF",
-        starterCode: `temp = int(input())\nif temp > 28:\n    print("ON")\nelse:\n    print("OFF")\n`,
-        hint: "ใช้ if temp > 28:",
-        testCases: [
-          { label: "temp = 31", stdin: ["31"], expectedOutput: "ON" },
-          { label: "temp = 25", stdin: ["25"], expectedOutput: "OFF" },
-        ],
-      },
-    ],
-  },
-  {
-    key: "island-binary-m1",
-    order: 2,
-    courseCode: "ว21103",
-    gradeLevel: 1,
-    name: "เกาะรหัส 0 กับ 1",
-    subtitle: "ม.1 · ถอดความหมายข้อมูลฐานสองและตรรกะบูลีน",
-    requiredLessonKey: "m1-binary-logic",
-    chestCoins: 35,
-    accentGradient: "from-cyan-500 to-teal-600",
-    stages: [
-      {
-        key: "adv-m1-3",
-        code: "2-1",
-        title: "คำนวณค่ากำลังสอง",
-        topicTag: "Powers of 2",
-        difficulty: "easy",
-        coinReward: 8,
-        xpReward: 30,
-        prompt: "รับเลขตำแหน่งบิต p = int(input()) แล้วพิมพ์ค่าประจำหลัก 2 ** p",
-        starterCode: `p = int(input())\nprint(2 ** p)\n`,
-        hint: "ใช้ตัวดำเนินการยกกำลัง ** เช่น 2 ** p",
-        testCases: [
-          { label: "บิตที่ 3", stdin: ["3"], expectedOutput: "8" },
-          { label: "บิตที่ 7", stdin: ["7"], expectedOutput: "128" },
-        ],
-      },
-      {
-        key: "adv-m1-4",
-        code: "2-2",
-        title: "ประตูตรรกะ AND",
-        topicTag: "Logic Gate",
-        difficulty: "medium",
-        coinReward: 10,
-        xpReward: 35,
-        prompt: "รับ a, b เป็น 0 หรือ 1 (2 บรรทัด) ถ้าเป็น 1 ทั้งคู่ให้พิมพ์ OPEN มิฉะนั้นพิมพ์ LOCKED",
-        starterCode: `a = int(input())\nb = int(input())\nif a == 1 and b == 1:\n    print("OPEN")\nelse:\n    print("LOCKED")\n`,
-        hint: "ใช้เงื่อนไข a == 1 and b == 1",
-        testCases: [
-          { label: "1 กับ 1", stdin: ["1", "1"], expectedOutput: "OPEN" },
-          { label: "1 กับ 0", stdin: ["1", "0"], expectedOutput: "LOCKED" },
-        ],
-      },
-    ],
-  },
+  ...V21103_ADVENTURE_ISLANDS,
   {
     key: "island-string-m2",
     order: 3,
@@ -727,23 +520,7 @@ export const ADVENTURE_ISLANDS: AdventureIslandDef[] = [
 // ============================================================================
 
 export const ARENA_CHALLENGES: ArenaProblemDef[] = [
-  {
-    key: "arena-sum-even",
-    title: "ผลรวมเลขคู่ช่วง 1 ถึง N",
-    courseCode: "ว21103",
-    gradeLevel: 1,
-    difficulty: "Bronze",
-    timeLimitSec: 180,
-    apRewardWin: 28,
-    coinReward: 20,
-    prompt: "รับจำนวนเต็มบวก N จาก input() แล้วพิมพ์ผลรวมของเลขคู่ทั้งหมดตั้งแต่ 1 ถึง N",
-    starterCode: `n = int(input())\nans = 0\nfor i in range(2, n + 1, 2):\n    ans += i\nprint(ans)\n`,
-    testCases: [
-      { label: "N = 6 (2+4+6)", stdin: ["6"], expectedOutput: "12" },
-      { label: "N = 10 (2+4+6+8+10)", stdin: ["10"], expectedOutput: "30" },
-      { label: "N = 1", stdin: ["1"], expectedOutput: "0" },
-    ],
-  },
+  ...V21103_ARENA_CHALLENGES,
   {
     key: "arena-palindrome",
     title: "คำพาลินโดรม (Palindrome Check)",

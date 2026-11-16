@@ -90,4 +90,73 @@ export const DEMO_CHALLENGES: DemoChallengeRecord[] = [
       microCorrectOption: "พัดลมจะปิด เพราะเงื่อนไข AND ต้องเป็นจริงทั้งสองฝั่ง",
     },
   },
+  {
+    id: "demo-ch-3",
+    challengeKey: "level-03-tinkercad-circuit",
+    title: "ภารกิจที่ 3: ต่อวงจร Tinkercad & ตัวต้านทานอย่างปลอดภัย (หน่วยที่ 5)",
+    orderIndex: 3,
+    difficulty: "medium",
+    maxScore: 100,
+    xpReward: 90,
+    config: {
+      story:
+        "เรียงลำดับขั้นตอนการต่อวงจร Micro:bit กับหลอด LED บน Breadboard ในโปรแกรมจำลอง Tinkercad ให้ถูกต้องและปลอดภัยตามตัวชี้วัด ว 4.1 ม.1/5",
+      blocks: [
+        { id: "c1", text: "วางบอร์ด Micro:bit (Breakout), Breadboard, LED และตัวต้านทาน 220Ω" },
+        { id: "c2", text: "ต่อสายสัญญาณจากขา P0 ของ Micro:bit เข้ากับขาหนึ่งของตัวต้านทาน" },
+        { id: "c3", text: "ต่อขาอีกด้านของตัวต้านทานเข้ากับขายาว (Anode +) ของหลอด LED" },
+        { id: "c4", text: "ต่อขาสั้น (Cathode -) ของหลอด LED กลับไปยังสาย GND ให้ครบวงจร" },
+        { id: "c5", text: "กด Start Simulation ใน Tinkercad เพื่อตรวจเช็กความปลอดภัยก่อนต่อจริง" },
+      ],
+      hint: "ต้องวางอุปกรณ์ก่อน จากนั้นไล่สายไฟจากขา P0 → ตัวต้านทาน → ขายาว LED (+) → ขาสั้น LED (-) → GND แล้วจึงทดสอบจำลอง",
+      microQuestion: {
+        prompt: "เหตุใดจึงต้องต่อตัวต้านทาน (Resistor) อนุกรมกับหลอด LED ก่อนต่อเข้าขา Micro:bit?",
+        options: [
+          "ช่วยจำกัดกระแสไฟฟ้าไม่ให้เกินพิกัด ป้องกันหลอด LED ขาดและถนอมพอร์ตบอร์ด",
+          "ช่วยสลับขั้วบวก-ลบของหลอด LED ให้เสียบด้านไหนก็ได้",
+          "ทำให้ไม่ต้องต่อสาย GND กลับเข้า Micro:bit",
+          "เพื่อให้โปรแกรม Tinkercad บันทึกไฟล์อัตโนมัติ",
+        ],
+      },
+    },
+    solutionCheck: {
+      correctOrder: ["c1", "c2", "c3", "c4", "c5"],
+      microCorrectOption: "ช่วยจำกัดกระแสไฟฟ้าไม่ให้เกินพิกัด ป้องกันหลอด LED ขาดและถนอมพอร์ตบอร์ด",
+    },
+  },
+  {
+    id: "demo-ch-4",
+    challengeKey: "level-04-autolight-debug",
+    title: "ภารกิจที่ 4: ใบงาน 5.1 ระบบเปิด-ปิดไฟ LED ด้วยเซนเซอร์แสง (หน่วยที่ 5)",
+    orderIndex: 4,
+    difficulty: "boss",
+    maxScore: 100,
+    xpReward: 120,
+    config: {
+      story:
+        "เรียงลำดับโครงสร้าง Block-based coding บน Micro:bit สำหรับใบงาน 5.1 ให้หลอด LED เปิดอัตโนมัติเมื่อฟ้ามืด และปิดเมื่อสว่าง",
+      blocks: [
+        { id: "a1", text: "ในลูป Forever: อ่านค่า light_level จากเซนเซอร์วัดแสง Micro:bit (0–255)" },
+        { id: "a2", text: "ตรวจสอบเงื่อนไข IF light_level < 100 (สภาพแวดล้อมเริ่มมืด):" },
+        { id: "a3", text: "    สั่ง digital write pin P0 = 1 ให้หลอด LED ติดสว่าง" },
+        { id: "a4", text: "ELSE (เมื่อค่าความสว่างเพียงพอ light_level >= 100):" },
+        { id: "a5", text: "    สั่ง digital write pin P0 = 0 เพื่อปิดหลอด LED" },
+      ],
+      hint: "เริ่มจากการอ่านค่าเซนเซอร์ในลูป Forever ก่อนเช็กเงื่อนไข IF light_level < 100 ... ELSE ...",
+      microQuestion: {
+        prompt:
+          "หากทดสอบบน Tinkercad แล้วพบว่าหลอด LED ไม่ยอมติดตอนกลางคืน (ค่าแสงต่ำ) นักเรียนควรตรวจสอบข้อบกพร่องตามตัวชี้วัด ว 4.1 ม.1/4 อย่างไร?",
+        options: [
+          "ตรวจทั้งสายไฟ/ขั้ว LED/GND บน Breadboard และตรวจเงื่อนไข < หรือ > ในบล็อกคำสั่ง",
+          "เปลี่ยนไปใช้วิธีเดาสุ่มลบโค้ดทั้งหมดโดยไม่ทดสอบซ้ำ",
+          "ถอดตัวต้านทานออกทั้งหมดเพื่อเพิ่มกระแสไฟให้มากที่สุด",
+          "ปิดระบบ LMS แล้วไม่ต้องตรวจสอบสายไฟ",
+        ],
+      },
+    },
+    solutionCheck: {
+      correctOrder: ["a1", "a2", "a3", "a4", "a5"],
+      microCorrectOption: "ตรวจทั้งสายไฟ/ขั้ว LED/GND บน Breadboard และตรวจเงื่อนไข < หรือ > ในบล็อกคำสั่ง",
+    },
+  },
 ];

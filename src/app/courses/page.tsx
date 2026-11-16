@@ -137,6 +137,15 @@ export default async function CoursesPage(props: {
                           <span>ลุยด่านล่าสมบัติ</span>
                         </Link>
                       )}
+                      {course.moduleKey === "algo-quest-m1" && (
+                        <Link
+                          href="/learn/demo"
+                          className="inline-flex min-h-10 items-center gap-1.5 rounded-xl bg-[#092551] px-4 py-2 text-xs font-bold text-white shadow-xs hover:bg-[#133A7A]"
+                        >
+                          <Sparkles className="h-4 w-4 text-amber-300" />
+                          <span>ภารกิจ Algo & Tinkercad (4 ด่าน)</span>
+                        </Link>
+                      )}
                       {course.moduleKey === "iot-se-m3" && (
                         <Link
                           href="/learn/demo?module=iot-se-m3"

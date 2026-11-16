@@ -33,7 +33,9 @@ export function AdventureMapClient({ initialCourse = "" }: { initialCourse?: str
       ? "v23202"
       : initialCourse && matchesCourseCode("ว21202", initialCourse)
         ? "v21202"
-        : "all"
+        : initialCourse && matchesCourseCode("ว21103", initialCourse)
+          ? "1"
+          : "all"
   );
   const [activeStage, setActiveStage] = useState<{
     island: AdventureIslandDef;
@@ -123,7 +125,7 @@ export function AdventureMapClient({ initialCourse = "" }: { initialCourse?: str
         <div className="mt-4 flex flex-wrap gap-1.5">
           {[
             { g: "all" as const, label: "ทุกเกาะ" },
-            { g: "1" as const, label: "ม.1 อัลกอริทึม" },
+            { g: "1" as const, label: "ม.1 อัลกอริทึม (ว21103)" },
             { g: "v21202" as const, label: "ม.1 micro:bit (ว21202)" },
             { g: "2" as const, label: "ม.2 Python" },
             { g: "3" as const, label: "ม.3 Cyber & Boss" },

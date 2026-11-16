@@ -8,7 +8,7 @@ const COURSE_FILTER_TABS = [
   { key: "ว21103", label: "ว21103 (ม.1)" },
   { key: "ว21202", label: "ว21202 micro:bit (ม.1)" },
   { key: "ว22103", label: "ว22103 (ม.2)" },
-  { key: "ว23103", label: "ว23103 Cyber (ม.3)" },
+  { key: "ว23103", label: "ว23103 นวัตกรรม (ม.3)" },
   { key: "ว23202", label: "ว23202 IoT (ม.3)" },
 ];
 

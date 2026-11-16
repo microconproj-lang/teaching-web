@@ -12,6 +12,13 @@ import {
   V21202_ARENA_CHALLENGES,
   V21202_LAB_PROBLEMS,
 } from "@/content/courses/v21202/practice";
+import { V23103_COURSE } from "@/content/courses/v23103/course";
+import { V23103_LESSONS } from "@/content/courses/v23103/lessons";
+import {
+  V23103_ADVENTURE_ISLANDS,
+  V23103_ARENA_CHALLENGES,
+  V23103_LAB_PROBLEMS,
+} from "@/content/courses/v23103/practice";
 import { V23202_COURSE } from "@/content/courses/v23202/course";
 import { V23202_LESSONS } from "@/content/courses/v23202/lessons";
 import {
@@ -65,29 +72,7 @@ export const COURSES: CourseDef[] = [
       },
     ],
   },
-  {
-    code: "ว23103",
-    slug: "v23103",
-    gradeLevel: 3,
-    gradeLabel: "ชั้นมัธยมศึกษาปีที่ 3 (พื้นฐาน)",
-    title: "ความมั่นคงไซเบอร์และโครงงานโค้ด",
-    subtitle: "ตรวจจับลิงก์ปลอม ถอดรหัสลับซีซาร์ และพัฒนาโปรแกรมขนาดย่อมด้วย Python",
-    semesterLabel: "ม.3 · เปิดโหมดฝึกปฏิบัติและภารกิจ",
-    status: "active",
-    theme: "teal-shield",
-    tags: ["Cyber Hygiene", "Phishing", "Cryptography", "Mini Project"],
-    moduleKey: "cyber-defense-m3",
-    stats: { lessonsCount: 2, exercisesCount: 4, missionsCount: 4, slidesCount: 10 },
-    units: [
-      {
-        unitNo: 1,
-        title: "UNIT 1 : การเข้ารหัสลับและวิเคราะห์ภัยไซเบอร์",
-        description: "จำลอง Caesar Cipher ด้วย Python และจับผิด URL ปลอมอย่างมืออาชีพ",
-        status: "active",
-        lessonKeys: ["m3-caesar-cipher", "m3-phishing-defense"],
-      },
-    ],
-  },
+  V23103_COURSE,
   V21202_COURSE,
   V23202_COURSE,
 ];
@@ -210,83 +195,9 @@ export const INTERACTIVE_LESSONS: InteractiveLessonDef[] = [
       },
     ],
   },
-  {
-    key: "m3-caesar-cipher",
-    courseCode: "ว23103",
-    gradeLevel: 3,
-    unitNo: 1,
-    title: "วิทยาการรหัสลับ: Caesar Cipher",
-    subtitle: "การเลื่อนตัวอักษรเพื่อเข้ารหัสและถอดรหัสข้อความด้วย Python",
-    durationMin: 15,
-    iconBg: "emerald",
-    slides: [
-      {
-        id: "s1",
-        kind: "visualizer",
-        title: "Visualizer: วงล้อรหัสลับซีซาร์",
-        subtitle: "ลองเลื่อนค่า Shift (Key) เพื่อดูข้อความปกติแปลงเป็น Ciphertext แบบเรียลไทม์",
-        body: ["รหัสซีซาร์ใช้การเลื่อนตัวอักษรไปข้างหน้า K ตำแหน่ง เช่น Shift=3 จะเปลี่ยน 'A' เป็น 'D'"],
-        visualizerType: "caesar-cipher",
-      },
-      {
-        id: "s2",
-        kind: "mission",
-        title: "ภารกิจลงมือทำ: ถอดรหัสด้วย ord() และ chr()",
-        body: ["เขียนโค้ดเลื่อนตัวอักษรภาษาอังกฤษตัวใหญ่ ch = 'D' ย้อนกลับ 3 ตำแหน่งให้กลายเป็น 'A'"],
-        mission: {
-          checkKey: "mission-m3-caesar",
-          filename: "caesar_shift.py",
-          prompt: "ใช้ ord(ch) - 3 แล้วแปลงกลับด้วย chr(...) เพื่อพิมพ์ตัวอักษรที่ถอดรหัสแล้ว",
-          starterCode: `ch = "D"\nshift = 3\ndecoded = chr(ord(ch) - shift)\nprint(decoded)\n`,
-          hints: ["ord('D') ได้ 68 เมื่อลบ 3 จะได้ 65 ซึ่ง chr(65) คือ 'A'"],
-          testCases: [{ label: "ถอดรหัส D ด้วย shift 3", expectedOutput: "A" }],
-          coinReward: 25,
-          xpReward: 45,
-        },
-      },
-    ],
-  },
-  {
-    key: "m3-phishing-defense",
-    courseCode: "ว23103",
-    gradeLevel: 3,
-    unitNo: 1,
-    title: "จับผิดลิงก์ปลอมและการป้องกัน Phishing",
-    subtitle: "วิเคราะห์โครงสร้าง Domain เพื่อแยกเว็บไซต์จริงออกจากเว็บหลอกลวง",
-    durationMin: 12,
-    iconBg: "blue",
-    slides: [
-      {
-        id: "s1",
-        kind: "visualizer",
-        title: "Inspector: สแกนจุดน่าสงสัยในลิงก์และอีเมล",
-        subtitle: "คลิกเลือกตัวอย่างลิงก์เพื่อวิเคราะห์จุดอันตราย",
-        body: ["สังเกต TLD, ตัวสะกดเลียนแบบ (Typosquatting) และโปรโตคอล HTTPS เสมอ"],
-        visualizerType: "phishing-inspector",
-      },
-      {
-        id: "s2",
-        kind: "quiz",
-        title: "เช็กความเข้าใจ: โดเมนโรงเรียนที่ถูกต้อง",
-        body: ["ตรวจสอบโดเมนของแพลตฟอร์มเรา"],
-        quiz: {
-          checkKey: "quiz-m3-phishing",
-          question: "โดเมนใดปลอดภัยและเป็นอีเมลทางการของโรงเรียน?",
-          options: [
-            "student@pccpl-login.com",
-            "student@pccpl.ac.th",
-            "admin@pccpl.ac.th.free-gift.net",
-            "teacher@pccpl-verify.info",
-          ],
-          correctIndex: 1,
-          explanation: "ต้องดูที่ส่วนท้ายสุดก่อน '/' คือ pccpl.ac.th เท่านั้น โดเมนที่มีคำต่อท้ายหรือขีดกลางเพิ่มเติมคือตัวลวง",
-          coinReward: 10,
-        },
-      },
-    ],
-  },
   ...V21103_LESSONS,
   ...V21202_LESSONS,
+  ...V23103_LESSONS,
   ...V23202_LESSONS,
 ];
 
@@ -349,27 +260,9 @@ export const LAB_PROBLEMS: LabProblemDef[] = [
       { label: "ชุดคะแนน 2", stdin: ["18 14 20"], expectedOutput: "MAX=20 AVG=17.3" },
     ],
   },
-  {
-    key: "lab-m3-password-check",
-    courseCode: "ว23103",
-    gradeLevel: 3,
-    title: "ตัวตรวจรหัสผ่านแข็งแรง (Security)",
-    difficulty: "ท้าทาย",
-    topic: "Cyber Security",
-    description:
-      "รับรหัสผ่านจาก input() ถ้ามีความยาวอย่างน้อย 8 ตัวและมีตัวเลขอย่างน้อย 1 ตัวให้พิมพ์ STRONG มิฉะนั้นพิมพ์ WEAK",
-    filename: "pw_check.py",
-    starterCode: `pw = input().strip()\nhas_digit = False\nfor ch in pw:\n    if ch.isdigit():\n        has_digit = True\nif len(pw) >= 8 and has_digit:\n    print("STRONG")\nelse:\n    print("WEAK")\n`,
-    hint: "วนลูปเช็ก ch.isdigit() คู่กับเงื่อนไข len(pw) >= 8",
-    coinReward: 30,
-    testCases: [
-      { label: "รหัสผ่านแข็งแรง", stdin: ["pccpl2026"], expectedOutput: "STRONG" },
-      { label: "สั้นเกินไป", stdin: ["abc12"], expectedOutput: "WEAK" },
-      { label: "ไม่มีตัวเลข", stdin: ["abcdefghij"], expectedOutput: "WEAK" },
-    ],
-  },
   ...V21103_LAB_PROBLEMS,
   ...V21202_LAB_PROBLEMS,
+  ...V23103_LAB_PROBLEMS,
   ...V23202_LAB_PROBLEMS,
 ];
 
@@ -453,65 +346,8 @@ export const ADVENTURE_ISLANDS: AdventureIslandDef[] = [
       },
     ],
   },
-  {
-    key: "island-cyber-m3",
-    order: 5,
-    courseCode: "ว23103",
-    gradeLevel: 3,
-    name: "เกาะนักสืบไซเบอร์",
-    subtitle: "ม.3 · เข้ารหัสลับ ตรวจจับโดเมน และการป้องกันบัญชี",
-    requiredLessonKey: "m3-caesar-cipher",
-    chestCoins: 50,
-    accentGradient: "from-emerald-500 to-cyan-600",
-    stages: [
-      {
-        key: "adv-m3-1",
-        code: "5-1",
-        title: "ตรวจสอบอีเมลโรงเรียน",
-        topicTag: "Validation",
-        difficulty: "medium",
-        coinReward: 15,
-        xpReward: 45,
-        prompt: "อ่านอีเมล e = input().strip().lower() ถ้าลงท้ายด้วย @pccpl.ac.th พิมพ์ VALID มิฉะนั้น INVALID",
-        starterCode: `e = input().strip().lower()\nif e.endswith("@pccpl.ac.th"):\n    print("VALID")\nelse:\n    print("INVALID")\n`,
-        hint: "ใช้เมธอด .endswith(\"@pccpl.ac.th\")",
-        testCases: [
-          { label: "อีเมลโรงเรียน", stdin: ["nong.p@pccpl.ac.th"], expectedOutput: "VALID" },
-          { label: "อีเมลอื่น", stdin: ["hacker@gmail.com"], expectedOutput: "INVALID" },
-        ],
-      },
-    ],
-  },
-  {
-    key: "island-boss",
-    order: 6,
-    courseCode: "ว23103",
-    gradeLevel: 3,
-    name: "เกาะจอมบั๊ก (Boss Island)",
-    subtitle: "บอสใหญ่ประจำภาคเรียน · รวมทักษะทุกชั้นปีเพื่อปลดหีบสมบัติทองคำ",
-    chestCoins: 150,
-    accentGradient: "from-amber-500 to-rose-600",
-    stages: [
-      {
-        key: "adv-boss-1",
-        code: "BOSS",
-        title: "ปราบบอสจอมบั๊ก: FizzBuzz ฉบับโค้ด",
-        topicTag: "Boss Challenge",
-        difficulty: "boss",
-        coinReward: 40,
-        xpReward: 100,
-        prompt:
-          "รับเลข n = int(input()) พิมพ์ 1 ถึง n โดยถ้าหาร 3 ลงตัวพิมพ์ PCC, หาร 5 ลงตัวพิมพ์ PL, หารทั้งคู่ลงตัวพิมพ์ PCCPL",
-        starterCode: `n = int(input())\nfor i in range(1, n + 1):\n    if i % 15 == 0:\n        print("PCCPL")\n    elif i % 3 == 0:\n        print("PCC")\n    elif i % 5 == 0:\n        print("PL")\n    else:\n        print(i)\n`,
-        hint: "ต้องเช็ก i % 15 == 0 ก่อน i % 3 == 0 และ i % 5 == 0 เสมอ",
-        testCases: [
-          { label: "n = 5", stdin: ["5"], expectedOutput: "1\n2\nPCC\n4\nPL" },
-          { label: "n = 15 (บรรทัดสุดท้ายเป็น PCCPL)", stdin: ["15"], expectedOutput: "1\n2\nPCC\n4\nPL\nPCC\n7\n8\nPCC\nPL\n11\nPCC\n13\n14\nPCCPL" },
-        ],
-      },
-    ],
-  },
   ...V21202_ADVENTURE_ISLANDS,
+  ...V23103_ADVENTURE_ISLANDS,
   ...V23202_ADVENTURE_ISLANDS,
 ];
 
@@ -539,24 +375,8 @@ export const ARENA_CHALLENGES: ArenaProblemDef[] = [
       { label: "Python", stdin: ["python"], expectedOutput: "NO" },
     ],
   },
-  {
-    key: "arena-second-max",
-    title: "คะแนนอันดับสองของห้อง",
-    courseCode: "ว23103",
-    gradeLevel: 3,
-    difficulty: "Gold",
-    timeLimitSec: 300,
-    apRewardWin: 60,
-    coinReward: 45,
-    prompt:
-      "รับรายการตัวเลขไม่ซ้ำกันอย่างน้อย 2 ตัวคั่นด้วยช่องว่าง แล้วพิมพ์ค่าที่มากเป็นอันดับ 2",
-    starterCode: `nums = sorted([int(x) for x in input().split()], reverse=True)\nprint(nums[1])\n`,
-    testCases: [
-      { label: "ชุดตัวเลข 1", stdin: ["10 45 22 99 64"], expectedOutput: "64" },
-      { label: "ชุดตัวเลข 2", stdin: ["5 12"], expectedOutput: "5" },
-    ],
-  },
   ...V21202_ARENA_CHALLENGES,
+  ...V23103_ARENA_CHALLENGES,
   ...V23202_ARENA_CHALLENGES,
 ];
 

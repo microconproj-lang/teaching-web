@@ -10,6 +10,7 @@ import {
 import { getCurrentSession } from "@/core/auth/session";
 import { generateStudentSeed } from "@/core/grading/anti-cheat";
 import { getRegisteredModule } from "@/core/modules/registry";
+import { loadDemoClientChallenges } from "@/core/modules/demo-registry";
 import type { ChallengeClientView, ChallengeProgressView } from "@/core/modules/contract";
 import { getShuffledBlocks } from "@/modules/algo-quest-m1/grader";
 
@@ -23,38 +24,14 @@ export default async function LearnModulePage(props: {
 
   // โหมดตัวอย่างบนเครื่องพัฒนา (ไม่ต้องเชื่อมต่อฐานข้อมูล)
   if (assignmentId === "demo") {
-    const requestedModuleKey =
-      demoModuleParam === "iot-se-m3"
-        ? "iot-se-m3"
-        : demoModuleParam === "microbit-m1"
-          ? "microbit-m1"
-          : "algo-quest-m1";
+    const requestedModuleKey = demoModuleParam?.trim() || "algo-quest-m1";
     const modDef = getRegisteredModule(requestedModuleKey);
     if (!modDef) notFound();
 
-    const PlayerComponent = (await modDef.loadPlayer()).default;
-    let clientChallenges: ChallengeClientView[] = [];
+    const clientChallenges = await loadDemoClientChallenges(requestedModuleKey, 2569);
+    if (!clientChallenges) notFound();
 
-    if (requestedModuleKey === "iot-se-m3") {
-      const { buildIotSeDemoClientChallenges } = await import("@/modules/iot-se-m3/demo-data");
-      clientChallenges = buildIotSeDemoClientChallenges(2569);
-    } else if (requestedModuleKey === "microbit-m1") {
-      const { buildMicrobitDemoClientChallenges } = await import("@/modules/microbit-m1/demo-data");
-      clientChallenges = buildMicrobitDemoClientChallenges(2569);
-    } else {
-      const { DEMO_CHALLENGES } = await import("@/modules/algo-quest-m1/demo-data");
-      clientChallenges = DEMO_CHALLENGES.map((ch, idx) => ({
-        id: ch.id,
-        challengeKey: ch.challengeKey,
-        title: ch.title,
-        orderIndex: ch.orderIndex,
-        difficulty: ch.difficulty,
-        maxScore: ch.maxScore,
-        xpReward: ch.xpReward,
-        studentSeed: 2569 + idx,
-        config: { ...ch.config, blocks: getShuffledBlocks(ch.config.blocks, 2569 + idx) },
-      }));
-    }
+    const PlayerComponent = (await modDef.loadPlayer()).default;
 
     return (
       <div className="min-h-screen bg-[#F4F7FD] text-[#092551]">
@@ -102,12 +79,7 @@ export default async function LearnModulePage(props: {
     const seed = generateStudentSeed(session.userId, ch.id, assignmentRow.assignment.semesterId);
     const rawConfig = { ...ch.config };
 
-    if (
-      (assignmentRow.mod.moduleKey === "algo-quest-m1" ||
-        assignmentRow.mod.moduleKey === "iot-se-m3" ||
-        assignmentRow.mod.moduleKey === "microbit-m1") &&
-      Array.isArray(rawConfig.blocks)
-    ) {
+    if (Array.isArray(rawConfig.blocks)) {
       rawConfig.blocks = getShuffledBlocks(rawConfig.blocks as { id: string; text: string }[], seed);
     }
 

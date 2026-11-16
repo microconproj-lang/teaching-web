@@ -14,6 +14,7 @@ import {
 import { getCurrentSession } from "@/core/auth/session";
 import { generateStudentSeed } from "@/core/grading/anti-cheat";
 import { awardBadges } from "@/core/grading/badge-engine";
+import { findDemoChallengeGradeTarget } from "@/core/modules/demo-registry";
 import { getRegisteredModule } from "@/core/modules/registry";
 import { grantUniqueCoins } from "@/core/platform/rewards";
 import type { SubmissionEvidence } from "@/core/modules/contract";
@@ -40,51 +41,16 @@ export async function POST(
 
   // โหมด Demo (เปิดให้ผู้เยี่ยมชมและนักเรียนทดลองฝึกด่านตัวอย่างได้โดยไม่ต้อง Login)
   if (body.assignmentId === "demo") {
-    let challengeConfig: Record<string, unknown> | undefined;
-    let solutionCheck: Record<string, unknown> | undefined;
-    let maxScore = 10;
-
-    if (moduleKey === "iot-se-m3") {
-      const { IOT_SE_DEMO_CHALLENGES } = await import("@/modules/iot-se-m3/demo-data");
-      const found = IOT_SE_DEMO_CHALLENGES.find(
-        (c) => `demo-iot-${c.challengeKey}` === body.challengeId || c.challengeKey === body.challengeId
-      );
-      if (found) {
-        challengeConfig = found.config as unknown as Record<string, unknown>;
-        solutionCheck = found.solutionCheck as unknown as Record<string, unknown>;
-        maxScore = found.maxScore;
-      }
-    } else if (moduleKey === "microbit-m1") {
-      const { MICROBIT_M1_DEMO_CHALLENGES } = await import("@/modules/microbit-m1/demo-data");
-      const found = MICROBIT_M1_DEMO_CHALLENGES.find(
-        (c) => `demo-mbit-${c.challengeKey}` === body.challengeId || c.challengeKey === body.challengeId
-      );
-      if (found) {
-        challengeConfig = found.config as unknown as Record<string, unknown>;
-        solutionCheck = found.solutionCheck as unknown as Record<string, unknown>;
-        maxScore = found.maxScore;
-      }
-    } else {
-      const { DEMO_CHALLENGES } = await import("@/modules/algo-quest-m1/demo-data");
-      const demoChallenge = DEMO_CHALLENGES.find(
-        (c) => c.id === body.challengeId || c.challengeKey === body.challengeId
-      );
-      if (demoChallenge) {
-        challengeConfig = demoChallenge.config;
-        solutionCheck = demoChallenge.solutionCheck;
-        maxScore = demoChallenge.maxScore;
-      }
-    }
-
-    if (!challengeConfig || !solutionCheck) {
+    const target = await findDemoChallengeGradeTarget(moduleKey, body.challengeId);
+    if (!target) {
       return NextResponse.json({ error: "ไม่พบด่านทดสอบ" }, { status: 404 });
     }
 
     const grade = await modDef.gradeSubmission({
-      challengeConfig,
-      solutionCheck,
+      challengeConfig: target.challengeConfig,
+      solutionCheck: target.solutionCheck,
       evidence: body.evidence,
-      maxScore,
+      maxScore: target.maxScore,
       studentSeed: 2569,
     });
     return NextResponse.json({

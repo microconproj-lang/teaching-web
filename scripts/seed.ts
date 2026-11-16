@@ -16,6 +16,8 @@ import {
 } from "../src/core/db/schema";
 import { algoQuestManifest } from "../src/modules/algo-quest-m1/manifest";
 import { DEMO_CHALLENGES } from "../src/modules/algo-quest-m1/demo-data";
+import { cyberDefenseM3Manifest } from "../src/modules/cyber-defense-m3/manifest";
+import { CYBER_DEFENSE_M3_DEMO_CHALLENGES } from "../src/modules/cyber-defense-m3/demo-data";
 import { iotSeM3Manifest } from "../src/modules/iot-se-m3/manifest";
 import { IOT_SE_DEMO_CHALLENGES } from "../src/modules/iot-se-m3/demo-data";
 import { microbitM1Manifest } from "../src/modules/microbit-m1/manifest";
@@ -254,6 +256,16 @@ async function main() {
     challengesList: MICROBIT_M1_DEMO_CHALLENGES,
     semesterId: sem1.id,
     classroomId: m1Room?.id,
+    weightPercent: "25.00",
+    focusMode: true,
+  });
+
+  await upsertModuleAndAssign({
+    manifest: cyberDefenseM3Manifest,
+    entryPath: "@/modules/cyber-defense-m3/Player",
+    challengesList: CYBER_DEFENSE_M3_DEMO_CHALLENGES,
+    semesterId: sem1.id,
+    classroomId: m3Room?.id,
     weightPercent: "25.00",
     focusMode: true,
   });

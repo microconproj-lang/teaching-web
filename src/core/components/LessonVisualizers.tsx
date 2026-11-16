@@ -16,6 +16,7 @@ import {
   RadioChannelVisualizer,
 } from "./MicrobitLessonVisualizers";
 import { TinkercadCircuitVisualizer } from "./V21103Visualizers";
+import { DataCleansingVisualizer } from "./V23103Visualizers";
 
 function StringSlicingVisualizer() {
   const [text, setText] = useState("COMPUTER");
@@ -510,6 +511,8 @@ export function LessonVisualizer({ type }: { type: VisualizerType }) {
       return <AccelGestureVisualizer />;
     case "tinkercad-circuit":
       return <TinkercadCircuitVisualizer />;
+    case "data-cleansing":
+      return <DataCleansingVisualizer />;
   }
 }
 

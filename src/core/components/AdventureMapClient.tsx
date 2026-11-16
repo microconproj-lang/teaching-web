@@ -35,7 +35,9 @@ export function AdventureMapClient({ initialCourse = "" }: { initialCourse?: str
         ? "v21202"
         : initialCourse && matchesCourseCode("ว21103", initialCourse)
           ? "1"
-          : "all"
+          : initialCourse && matchesCourseCode("ว23103", initialCourse)
+            ? "3"
+            : "all"
   );
   const [activeStage, setActiveStage] = useState<{
     island: AdventureIslandDef;
@@ -128,7 +130,7 @@ export function AdventureMapClient({ initialCourse = "" }: { initialCourse?: str
             { g: "1" as const, label: "ม.1 อัลกอริทึม (ว21103)" },
             { g: "v21202" as const, label: "ม.1 micro:bit (ว21202)" },
             { g: "2" as const, label: "ม.2 Python" },
-            { g: "3" as const, label: "ม.3 Cyber & Boss" },
+            { g: "3" as const, label: "ม.3 นวัตกรรม & Boss (ว23103)" },
             { g: "v23202" as const, label: "ม.3 IoT (ว23202)" },
           ].map((t) => (
             <button

@@ -15,7 +15,8 @@ export type VisualizerType =
   | "radio-channel"
   | "array-sort"
   | "accel-gesture"
-  | "tinkercad-circuit";
+  | "tinkercad-circuit"
+  | "data-cleansing";
 
 export interface LessonResourceDef {
   label: string;

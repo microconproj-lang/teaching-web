@@ -41,7 +41,7 @@ export default async function CoursesPage(props: {
                 { key: "v21103", label: "ม.1 (ว21103)", href: "/courses?course=v21103", active: matchesCourseCode("ว21103", selectedCourse) },
                 { key: "v21202", label: "ม.1 micro:bit (ว21202)", href: "/courses?course=v21202", active: matchesCourseCode("ว21202", selectedCourse) },
                 { key: "v22103", label: "ม.2 (ว22103)", href: "/courses?course=v22103", active: matchesCourseCode("ว22103", selectedCourse) || selectedGrade === 2 },
-                { key: "v23103", label: "ม.3 Cyber (ว23103)", href: "/courses?course=v23103", active: matchesCourseCode("ว23103", selectedCourse) },
+                { key: "v23103", label: "ม.3 นวัตกรรม (ว23103)", href: "/courses?course=v23103", active: matchesCourseCode("ว23103", selectedCourse) },
                 { key: "v23202", label: "ม.3 IoT (ว23202)", href: "/courses?course=v23202", active: matchesCourseCode("ว23202", selectedCourse) },
               ].map((tab) => (
                 <Link
@@ -144,6 +144,15 @@ export default async function CoursesPage(props: {
                         >
                           <Sparkles className="h-4 w-4 text-amber-300" />
                           <span>ภารกิจ Algo & Tinkercad (4 ด่าน)</span>
+                        </Link>
+                      )}
+                      {course.moduleKey === "cyber-defense-m3" && (
+                        <Link
+                          href="/learn/demo?module=cyber-defense-m3"
+                          className="inline-flex min-h-10 items-center gap-1.5 rounded-xl bg-teal-700 px-4 py-2 text-xs font-bold text-white shadow-xs hover:bg-teal-800"
+                        >
+                          <Sparkles className="h-4 w-4 text-emerald-200" />
+                          <span>ภารกิจนวัตกรรม & IoT (6 ด่าน)</span>
                         </Link>
                       )}
                       {course.moduleKey === "iot-se-m3" && (

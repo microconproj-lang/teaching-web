@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { CheckCircle2, Lock, Play, Star } from "lucide-react";
 import { WORLD_MANIFESTS, type WorldDefinition } from "@/core/config/worlds";
+import { buildDemoHrefForWorld, getDemoModuleKeyForWorld } from "@/core/modules/registry";
 
 export interface LiveChallengeNode {
   id: string;
@@ -70,15 +71,8 @@ function buildWorldStages(
     });
   }
 
+  const demoModuleKey = getDemoModuleKeyForWorld(world);
   return world.stages.map((st, idx) => {
-    const demoModuleKey =
-      world.key === "world-1"
-        ? "algo-quest-m1"
-        : world.key === "world-4"
-          ? "iot-se-m3"
-          : world.key === "world-5"
-            ? "microbit-m1"
-            : null;
     const status: StageNodeStatus =
       demoModuleKey && idx === 0
         ? "active"
@@ -86,11 +80,7 @@ function buildWorldStages(
           ? "open"
           : "locked";
 
-    const href = !demoModuleKey
-      ? null
-      : demoModuleKey === "algo-quest-m1"
-        ? `/learn/demo?stage=${encodeURIComponent(st.challengeKey ?? "")}`
-        : `/learn/demo?module=${encodeURIComponent(demoModuleKey)}&stage=${encodeURIComponent(st.challengeKey ?? "")}`;
+    const href = buildDemoHrefForWorld(world, st.challengeKey);
 
     return {
       stageCode: st.stageCode,

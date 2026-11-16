@@ -232,7 +232,7 @@ export function CodingLabClient({
                     { key: "v21103", label: "ม.1 (ว21103)", active: matchesCourseCode("ว21103", courseFilter) || (gradeFilter === 1 && !courseFilter), onClick: () => { setCourseFilter("ว21103"); setGradeFilter(1); } },
                     { key: "v21202", label: "ว21202 micro:bit", active: matchesCourseCode("ว21202", courseFilter), onClick: () => { setCourseFilter("ว21202"); setGradeFilter(1); } },
                     { key: "g2", label: "ม.2", active: gradeFilter === 2 && !courseFilter, onClick: () => { setGradeFilter(2); setCourseFilter(""); } },
-                    { key: "g3", label: "ม.3", active: gradeFilter === 3 && !courseFilter, onClick: () => { setGradeFilter(3); setCourseFilter(""); } },
+                    { key: "v23103", label: "ม.3 (ว23103)", active: matchesCourseCode("ว23103", courseFilter) || (gradeFilter === 3 && !courseFilter), onClick: () => { setCourseFilter("ว23103"); setGradeFilter(3); } },
                     { key: "v23202", label: "ว23202 IoT", active: matchesCourseCode("ว23202", courseFilter), onClick: () => { setCourseFilter("ว23202"); setGradeFilter(3); } },
                   ].map((tab) => (
                     <button

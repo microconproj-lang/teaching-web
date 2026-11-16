@@ -4,6 +4,7 @@ import { ArrowRight, BookOpen, Compass, Layers, Lock, Play, Sparkles } from "luc
 import { db, isDatabaseReachable } from "@/core/db";
 import { moduleAssignments, modules, semesters } from "@/core/db/schema";
 import { WORLD_MANIFESTS } from "@/core/config/worlds";
+import { buildDemoHrefForWorld } from "@/core/modules/registry";
 import { ServerAppShell } from "@/core/components/ServerAppShell";
 
 export const dynamic = "force-dynamic";
@@ -84,13 +85,7 @@ export default async function WorldsPage() {
               .find(Boolean);
             const launchHref = matchedAssignmentId
               ? `/learn/${matchedAssignmentId}`
-              : world.key === "world-1"
-                ? "/learn/demo"
-                : world.key === "world-4"
-                  ? "/learn/demo?module=iot-se-m3"
-                  : world.key === "world-5"
-                    ? "/learn/demo?module=microbit-m1"
-                    : null;
+              : buildDemoHrefForWorld(world);
             const headerGrad =
               WORLD_HEADER_GRADIENTS[world.key] ?? "from-[#0E4EC7] to-[#227FF5]";
 

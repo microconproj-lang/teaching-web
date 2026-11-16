@@ -58,9 +58,7 @@ export function TinkercadCircuitVisualizer() {
   let statusTitle = "วงจรทำงานถูกต้องและปลอดภัย";
   let statusMessage =
     simMode === "autolight"
-      ? lightLevel < threshold
-        ? `ค่าแสง ${lightLevel} < เกณฑ์ ${threshold} (มืด) → ขา P0 จ่ายสัญญาณ 1 (HIGH) หลอด LED ติดสว่างอัตโนมัติ`
-        : `ค่าแสง ${lightLevel} ≥ เกณฑ์ ${threshold} (สว่าง) → ขา P0 จ่ายสัญญาณ 0 (LOW) ปิดหลอด LED เพื่อประหยัดพลังงาน`
+      ? `ค่าแสง ${lightLevel} < เกณฑ์ ${threshold} (มืด) → ขา P0 จ่ายสัญญาณ 1 (HIGH) หลอด LED ติดสว่างอัตโนมัติ`
       : resistor === "10000"
         ? "วงจรปลอดภัย แต่ตัวต้านทาน 10kΩ สูงเกินไป ทำให้กระแสเพียง 0.13 mA หลอด LED จึงติดริบหรี่มาก"
         : "กระแส ~5.9 mA ไหลผ่านตัวต้านทาน 220Ω → ขา Anode (+) → LED → ขา Cathode (-) → GND อย่างปลอดภัย";
@@ -75,14 +73,22 @@ export function TinkercadCircuitVisualizer() {
     statusTitle = "พบข้อบกพร่อง: ต่อหลอด LED กลับขั้ว";
     statusMessage =
       "LED เป็นอุปกรณ์มีขั้ว กระแสไหลทิศทางเดียว — ต้องต่อขายาว (Anode +) รับไฟจาก P0 ผ่านตัวต้านทาน และขาสั้น (Cathode -) ลง GND";
-  } else if (isOvercurrent) {
+  } else if (resistor === "0") {
     statusKind = "danger";
-    statusTitle = "คำเตือนความปลอดภัย (ว 4.1 ม.1/5): หลอด LED เสียหาย!";
+    statusTitle = isOvercurrent
+      ? "คำเตือนความปลอดภัย (ว 4.1 ม.1/5): หลอด LED เสียหาย!"
+      : "คำเตือนความปลอดภัย (ว 4.1 ม.1/5): ยังไม่ได้ใส่ตัวต้านทาน (0Ω)!";
     statusMessage =
-      "ไม่ได้ต่อตัวต้านทาน (0Ω) ทำให้กระแสพุ่งเกินพิกัดของ LED และพอร์ต Micro:bit! ให้ใส่ตัวต้านทาน 220Ω เพื่อจำกัดกระแสก่อนทดลองต่อจริง";
-  } else if (!logicRequestsOn && isCircuitHealthy) {
+      "ไม่ได้ต่อตัวต้านทาน (0Ω) ทันทีที่ขา P0 จ่ายไฟ HIGH กระแสจะพุ่งเกินพิกัดของ LED และพอร์ต Micro:bit! ให้ใส่ตัวต้านทาน 220Ω ก่อนทดลองจริง";
+  } else if (!logicRequestsOn) {
     statusKind = "standby";
-    statusTitle = simMode === "autolight" ? "โหมดประหยัดพลังงาน: หลอด LED ปิดอยู่" : "จังหวะ OFF (กระพริบ)";
+    if (simMode === "autolight") {
+      statusTitle = "โหมดประหยัดพลังงาน: หลอด LED ปิดอยู่";
+      statusMessage = `ค่าแสง ${lightLevel} ≥ เกณฑ์ ${threshold} (สว่าง) → ขา P0 จ่ายสัญญาณ 0 (LOW) ปิดหลอด LED เพื่อประหยัดพลังงาน`;
+    } else {
+      statusTitle = "จังหวะ OFF (กระพริบ)";
+      statusMessage = `จังหวะ LOW (0V): ขา P0 หยุดจ่ายไฟชั่วคราว (วงจรต่อตัวต้านทาน ${resistor === "220" ? "220Ω" : "10kΩ"} ถูกต้องและปลอดภัย)`;
+    }
   }
 
   return (
@@ -93,11 +99,10 @@ export function TinkercadCircuitVisualizer() {
           <button
             type="button"
             onClick={() => setSimMode("safety")}
-            className={`inline-flex items-center gap-1.5 rounded-xl px-3.5 py-2 text-xs font-bold transition ${
-              simMode === "safety"
+            className={`inline-flex items-center gap-1.5 rounded-xl px-3.5 py-2 text-xs font-bold transition ${simMode === "safety"
                 ? "bg-[#1364E7] text-white shadow-xs"
                 : "border border-[#D4E4FC] bg-white text-[#35517D] hover:border-[#1364E7]"
-            }`}
+              }`}
           >
             <Wrench className="h-3.5 w-3.5" />
             <span>1. ทดลองต่อวงจร & ตัวต้านทาน (Tinkercad)</span>
@@ -105,11 +110,10 @@ export function TinkercadCircuitVisualizer() {
           <button
             type="button"
             onClick={() => setSimMode("autolight")}
-            className={`inline-flex items-center gap-1.5 rounded-xl px-3.5 py-2 text-xs font-bold transition ${
-              simMode === "autolight"
+            className={`inline-flex items-center gap-1.5 rounded-xl px-3.5 py-2 text-xs font-bold transition ${simMode === "autolight"
                 ? "bg-[#092551] text-amber-300 shadow-xs"
                 : "border border-[#D4E4FC] bg-white text-[#35517D] hover:border-[#092551]"
-            }`}
+              }`}
           >
             <Sun className="h-3.5 w-3.5" />
             <span>2. ใบงาน 5.1: ไฟ LED อัตโนมัติด้วยเซนเซอร์แสง</span>
@@ -145,13 +149,12 @@ export function TinkercadCircuitVisualizer() {
                   key={opt.key}
                   type="button"
                   onClick={() => setResistor(opt.key)}
-                  className={`rounded-lg border px-2 py-1.5 text-[11px] font-bold transition ${
-                    resistor === opt.key
+                  className={`rounded-lg border px-2 py-1.5 text-[11px] font-bold transition ${resistor === opt.key
                       ? opt.key === "0"
                         ? "border-rose-500 bg-rose-50 text-rose-800"
                         : "border-[#1364E7] bg-[#EFF6FF] text-[#092551]"
                       : "border-[#E1EAFB] bg-[#FBFCFF] text-[#5C7299] hover:border-[#9FC0F8]"
-                  }`}
+                    }`}
                 >
                   {opt.label}
                 </button>
@@ -163,11 +166,10 @@ export function TinkercadCircuitVisualizer() {
             <button
               type="button"
               onClick={() => setPolarityOk((v) => !v)}
-              className={`rounded-xl border px-3 py-2 text-left text-[11px] font-semibold transition ${
-                polarityOk
+              className={`rounded-xl border px-3 py-2 text-left text-[11px] font-semibold transition ${polarityOk
                   ? "border-emerald-200 bg-emerald-50 text-emerald-900"
                   : "border-amber-300 bg-amber-50 text-amber-900"
-              }`}
+                }`}
             >
               <div>ขั้วหลอด LED:</div>
               <div className="mt-0.5 font-bold">{polarityOk ? "ถูกต้อง (+/-)" : "กลับขั้ว (-/+)"}</div>
@@ -176,11 +178,10 @@ export function TinkercadCircuitVisualizer() {
             <button
               type="button"
               onClick={() => setGndConnected((v) => !v)}
-              className={`rounded-xl border px-3 py-2 text-left text-[11px] font-semibold transition ${
-                gndConnected
+              className={`rounded-xl border px-3 py-2 text-left text-[11px] font-semibold transition ${gndConnected
                   ? "border-emerald-200 bg-emerald-50 text-emerald-900"
                   : "border-amber-300 bg-amber-50 text-amber-900"
-              }`}
+                }`}
             >
               <div>สายกราวด์ (GND):</div>
               <div className="mt-0.5 font-bold">{gndConnected ? "ต่อครบวงจร" : "ขาดการต่อ GND"}</div>
@@ -428,15 +429,14 @@ export function TinkercadCircuitVisualizer() {
 
       {/* Diagnostic Alert Bar */}
       <div
-        className={`flex items-start gap-3 rounded-xl border p-4 text-xs ${
-          statusKind === "danger"
+        className={`flex items-start gap-3 rounded-xl border p-4 text-xs ${statusKind === "danger"
             ? "border-rose-300 bg-rose-50 text-rose-900"
             : statusKind === "bug"
               ? "border-amber-300 bg-amber-50 text-amber-900"
               : statusKind === "standby"
                 ? "border-slate-200 bg-white text-slate-700"
                 : "border-emerald-200 bg-emerald-50 text-emerald-900"
-        }`}
+          }`}
       >
         {statusKind === "danger" || statusKind === "bug" ? (
           <AlertTriangle className="mt-0.5 h-4 w-4 shrink-0" />

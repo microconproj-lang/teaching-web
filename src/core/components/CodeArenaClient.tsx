@@ -272,7 +272,7 @@ export function CodeArenaClient({
               { key: "ว21103", label: "ม.1 (ว21103)" },
               { key: "ว21202", label: "ม.1 micro:bit (ว21202)" },
               { key: "ว22103", label: "ม.2 (ว22103)" },
-              { key: "ว23103", label: "ม.3 Cyber (ว23103)" },
+              { key: "ว23103", label: "ม.3 นวัตกรรม (ว23103)" },
               { key: "ว23202", label: "ม.3 IoT (ว23202)" },
             ].map((tabItem) => {
               const active =
